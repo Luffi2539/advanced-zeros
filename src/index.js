@@ -19,50 +19,46 @@ module.exports = function getZerosCount(number, base) {
   numberX=numberX.join(''); 
   
   */ 
-var zeros=0;
-var j=2;
-var bases=[];
-for (i=1;i<base;i++){
-    if(base%j==0){
-      bases.push(j);
-      base/=j;
-      }
-    else {
-      j++;
-      
-      }
-  }
+ var bases=[];
+ var zerosMin=Infinity;
+ for (j=2;j<base;){
+     if(base%j==0){
+       bases.push(j);
+       base/=j;
+       }
+     else {
+       j++;
+       }
+   }
+ 
+ bases.push(base);
+ do{
 
-bases.push(base);
-  
-var l=bases.length;
-  if(bases[l-1]==1){
-    var newBase=bases[l-2];
-  }
-  else if(bases[l-1]==bases[l-2]){
+    var l=bases.length;
     newBase=bases[l-1];
     var counter=0;
-      for(i=0;i<l;i++){
-        if(bases[i]==newBase){
-        counter++;
-        }
-      }
-    while (Math.floor(number)>0){
-    number/=newBase;
-    zeros+=Math.floor(number);
-    }
-    zeros=Math.floor(zeros/counter);
-    return zeros;
-  }
-  else {
-    newBase=bases[l-1];
-  }
+        for(i=0;i<l;i++){
+          if(bases[i]==newBase){
+            counter++;
+            bases.splice(i,1);
+            l--;
+            i--;
+          }  
  
-while (Math.floor(number)>0){
-  number/=newBase;
-  zeros+=Math.floor(number);
-}
+          }
+    var buffNumber=number;
+    var zeros=0;
+        while (Math.floor(buffNumber)>0){
+          buffNumber/=newBase;
+          zeros+=Math.floor(buffNumber);
+        }
+    zeros/=counter;
+        if (zeros<zerosMin){
+          zerosMin=Math.floor(zeros);
+        }
+ 
+ }
+  while(l>0);
 
-
-return zeros;
+return zerosMin;
 }
